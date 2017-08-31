@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>CCNS Chatbot Quiz Leaderboard</title>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+   </head>
+   <body>
+      <div class="container">
+         <!-- Content here -->
+         <h1 class="center">Leaderboard</h1>
+         <table class="table">
+            <thead class="table-inverse">
+               <tr>
+                  <th>#</th>
+                  <th>Nickname</th>
+                  <th>Score</th>
+               </tr>
+            </thead>
+            <tbody id="board">
+            </tbody>
+         </table>
+      </div>
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script
+         src="https://code.jquery.com/jquery-3.2.1.min.js"
+         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+         crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+      <script>
+         $.get("http://<api-url>/user-database.json", (users)=>{
+         	console.log(users)
+         	var sorted = []
+         	$.each(users, (key, value) => {
+         		sorted.push([key, value.nickname, value.point]);
+         	})
+         	sorted.sort((a,b)=>b[2]-a[2])
+         	appendUsers(sorted)
+         })
+      </script>
+      <script>
+         function appendUsers(sorted) {
+          var board = $("#board")
+          $.each(sorted, (key, value) => {
+          	var name
+          	var score = value[2]
+         
+          	if(value[1]) name = value[1]
+          	else name = value[0]
+         
+          	var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
+          					.append($("<td>").text(name))
+          					.append($("<td>").text(score))
+          	board.append(tr);
+          })
+         }
+      </script>
+   </body>
+</html>
