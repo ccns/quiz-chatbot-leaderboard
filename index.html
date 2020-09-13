@@ -71,6 +71,7 @@
 
                 function platformToImage(platform) {
                     return $("<img>").attr("src", `icon-${platform}.png`)
+                        .attr("alt", platform)
                 }
         
                 var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
