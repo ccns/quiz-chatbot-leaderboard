@@ -8,6 +8,11 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+      <style>
+        table img {
+            height: 2em;
+        }
+      </style>
    </head>
    <body>
       <div class="container">
@@ -17,7 +22,9 @@
             <thead class="table-inverse">
                <tr>
                   <th>#</th>
+                  <th>Platform</th>
                   <th>Name</th>
+                  <th>ID</th>
                   <th>Score</th>
                </tr>
             </thead>
@@ -35,24 +42,41 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
       <script>
         var apiBaseUrl = 'https://<api-server-address>'
-        $.getJSON(`${apiBaseUrl}/v1/players`, (response)=>{
+        Promise.all([
+            $.getJSON(`${apiBaseUrl}/players`),
+            $.getJSON(`${apiBaseUrl}/rank`)
+        ]).then((responseList)=>{
             console.assert(
-                response.status.status_code == 200,
+                responseList.every(r => r.status.status_code == 200),
                 'server response error'
             )
-            var users = response.data
-            var sorted = users.slice().sort((a,b) => b.score - a.score)
+            var userList = responseList[0].data
+            var rankList = responseList[1].data
+            var userDict = {}
+            userList.forEach(user => userDict[user.name] = user)
+            rankList.forEach(user => userDict[user.name].score = user.score)
+            var sorted = Object.values(userDict).sort(
+                (a,b) => b.score - a.score
+            )
             appendUsers(sorted)
         })
 
         function appendUsers(sorted) {
             var board = $("#board")
             $.each(sorted, (key, user) => {
-                var name = user.name
+                var id = user.name
+                var name = user.nickname
                 var score = user.score
+                var platformImage = platformToImage(user.platform)
+
+                function platformToImage(platform) {
+                    return $("<img>").attr("src", `icon-${platform}.png`)
+                }
         
                 var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
+                    .append($("<td>").append(platformImage))
                     .append($("<td>").text(name))
+                    .append($("<td>").text(id))
                     .append($("<td>").text(score))
                 board.append(tr);
             })
