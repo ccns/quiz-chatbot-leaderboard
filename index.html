@@ -53,7 +53,10 @@
             var userList = responseList[0].data
             var rankList = responseList[1].data
             var userDict = {}
-            userList.forEach(user => userDict[user.name] = user)
+            userList.forEach(user => {
+                if (!user.score) user.score = 0
+                userDict[user.name] = user
+            })
             rankList.forEach(user => userDict[user.name].score = user.score)
             var sorted = Object.values(userDict).sort(
                 (a,b) => b.score - a.score
