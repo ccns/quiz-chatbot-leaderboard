@@ -29,7 +29,6 @@
                   <th>#</th>
                   <th>Platform</th>
                   <th>Name</th>
-                  <th>ID</th>
                   <th>Score</th>
                </tr>
             </thead>
@@ -72,7 +71,6 @@
         function appendUsers(sorted) {
             var board = $("#board")
             $.each(sorted, (key, user) => {
-                var id = user.name
                 var name = user.nickname
                 var score = user.score
                 var platformImage = platformToImage(user.platform)
@@ -86,7 +84,6 @@
                 var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
                     .append($("<td>").append(platformImage))
                     .append($("<td>").text(name))
-                    .append($("<td>").text(id))
                     .append($("<td>").text(score))
                 board.append(tr);
             })
