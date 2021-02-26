@@ -65,7 +65,7 @@
         function appendUsers(sorted) {
             var board = $("#board")
             $.each(sorted, (key, user) => {
-                var name = user.nickname
+                var name = user.name
                 var score = user.score
                 var platformImage = platformToImage(user.platform)
 
