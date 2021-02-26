@@ -42,8 +42,7 @@
       <script>
         var apiBaseUrl = 'https://<api-server-address>'
         Promise.all([
-            $.getJSON(`${apiBaseUrl}/players`),
-            $.getJSON(`${apiBaseUrl}/rank`)
+            $.getJSON(`${apiBaseUrl}/leaderboard/`)
         ]).then((responseList)=>{
             console.assert(
                 responseList.every(r => r.status.status_code == 200),
@@ -75,7 +74,7 @@
                         .attr("alt", platform)
                         .attr("title", platform)
                 }
-        
+
                 var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
                     .append($("<td>").append(platformImage))
                     .append($("<td>").text(name))
