@@ -57,7 +57,7 @@
                 var platformImage = platformToImage(user.platform)
 
                 function platformToImage(platform) {
-                    return $("<img>").attr("src", `icon-${user.platform}.png`)
+                    return $("<img>").attr("src", `icon-${user.platform.toLowerCase()}.png`)
                         .attr("alt", platform)
                         .attr("title", platform)
                 }
