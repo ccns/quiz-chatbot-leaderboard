@@ -44,38 +44,30 @@
         Promise.all([
             $.getJSON(`${apiBaseUrl}/leaderboard/`)
         ]).then((responseList)=>{
-            var userList = responseList[0].data
-            var rankList = responseList[1].data
             var userDict = {}
-            userList.forEach(user => {
-                if (!user.score) user.score = 0
-                userDict[user.name] = user
-            })
-            rankList.forEach(user => userDict[user.name].score = user.score)
-            var sorted = Object.values(userDict).sort(
-                (a,b) => b.score - a.score
-            )
-            appendUsers(sorted)
+            appendUsers(responseList[0])
         })
 
         function appendUsers(sorted) {
             var board = $("#board")
-            $.each(sorted, (key, user) => {
+            var key = 1
+            sorted.forEach(user => {
                 var name = user.name
                 var score = user.score
                 var platformImage = platformToImage(user.platform)
 
                 function platformToImage(platform) {
-                    return $("<img>").attr("src", `icon-${platform}.png`)
+                    return $("<img>").attr("src", `icon-${user.platform}.png`)
                         .attr("alt", platform)
                         .attr("title", platform)
                 }
 
-                var tr = $("<tr>").append($("<th>").attr("scope","row").text(key+1))
+                var tr = $("<tr>").append($("<th>").attr("scope","row").text(key))
                     .append($("<td>").append(platformImage))
                     .append($("<td>").text(name))
                     .append($("<td>").text(score))
                 board.append(tr);
+                key++;
             })
         }
       </script>
