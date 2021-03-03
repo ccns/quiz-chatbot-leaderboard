@@ -44,10 +44,6 @@
         Promise.all([
             $.getJSON(`${apiBaseUrl}/leaderboard/`)
         ]).then((responseList)=>{
-            console.assert(
-                responseList.every(r => r.status.status_code == 200),
-                'server response error'
-            )
             var userList = responseList[0].data
             var rankList = responseList[1].data
             var userDict = {}
